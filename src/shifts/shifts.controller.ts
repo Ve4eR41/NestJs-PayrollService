@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
 import { CreateShiftsDto } from "./dto/CreateShifts.dto";
 import { ShiftsService } from "./shifts.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -26,6 +26,7 @@ export class ShiftsController {
 
 
 
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Shifts] })
     @Get("/all")
@@ -35,11 +36,22 @@ export class ShiftsController {
 
 
 
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: '...' })
+    @ApiResponse({ status: 200, type: [Shifts] })
+    @Get("")
+    getUsersShifts(@Request() req: Request) {
+        return this.ShiftsService.getUsersShifts(req)
+    }
+
+
+
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Shifts] })
     @Post("/create")
-    create(@Body() dto: CreateShiftsDto) {
-        return this.ShiftsService.create(dto)
+    create(@Body() dto: CreateShiftsDto, @Request() req: Request) {
+        return this.ShiftsService.create(dto, req)
     }
 
 

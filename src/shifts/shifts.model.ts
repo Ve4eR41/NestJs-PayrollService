@@ -1,5 +1,6 @@
 import { BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { ApiProperty } from "@nestjs/swagger";
+import { User } from "src/users/users.model";
 
 interface ShiftsCreationAttrs {
     timeStart: Date;
@@ -7,6 +8,7 @@ interface ShiftsCreationAttrs {
     shopName: number;
     revenue: number;
     cheks: number;
+    userId: number;
 }
 
 @Table({ tableName: 'shifts' })
@@ -19,6 +21,10 @@ export class Shifts extends Model<Shifts, ShiftsCreationAttrs> {
     @ApiProperty({ example: '1', description: 'Дата начала смены' })
     @Column({ type: DataType.DATE })
     timeStart: Date;
+
+    @ForeignKey(() => User)
+    @Column({ type: DataType.INTEGER })
+    userId: number;
 
     @ApiProperty({ example: '1', description: 'Дата окончания смены' })
     @Column({ type: DataType.DATE })
