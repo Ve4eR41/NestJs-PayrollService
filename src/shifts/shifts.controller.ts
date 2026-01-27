@@ -9,6 +9,7 @@ import { ValidationPipe } from "../pipes/validation.pipe";
 import { get } from 'http';
 import { CreateShiftsDto } from './dto/CreateShifts.dto ';
 import { DeleteShiftDto } from './dto/DeleteShift.dto';
+import { EditShiftsDto } from './dto/EditShifts.dto';
 
 @ApiTags('///')
 @Controller('shifts')
@@ -63,6 +64,16 @@ export class ShiftsController {
     @Post("/delete")
     delete(@Body() dto: DeleteShiftDto, @Request() req: Request) {
         return this.ShiftsService.delete(dto, req)
+    }
+
+
+
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: '...' })
+    @ApiResponse({ status: 200, type: [Shifts] })
+    @Post("/edit")
+    edit(@Body() dto: EditShiftsDto, @Request() req: Request) {
+        return this.ShiftsService.edit(dto, req)
     }
 
 

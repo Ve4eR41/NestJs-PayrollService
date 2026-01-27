@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable, Request } from '@nestjs/common';
 import { Shifts } from "./shifts.model";
 import { InjectModel } from "@nestjs/sequelize";
-import { RolesService } from "../roles/roles.service";
-import { Sequelize } from 'sequelize';
+import { Sequelize, where } from 'sequelize';
 import RequestCustom from 'src/types/request.t';
 import { DeleteShiftDto } from './dto/DeleteShift.dto';
 import { CreateShiftsDto } from './dto/CreateShifts.dto ';
-import { log } from 'console';
+import { EditShiftsDto } from './dto/EditShifts.dto';
 
 @Injectable()
 export class ShiftsService {
@@ -40,20 +39,25 @@ export class ShiftsService {
     }
 
 
+
     async delete(dto: DeleteShiftDto, req: Request) {
         const { user } = req as RequestCustom
         const { shiftId } = dto
 
-        console.log(`❤`+user.id+`❤`+shiftId);
-        
         const deleteShift = await this.ShiftsRepository.destroy({ where: { userId: user.id, id: shiftId } });
         return deleteShift;
     }
 
 
 
-    async edit() {
+    async edit(dto: EditShiftsDto, req: Request) {
+        const { user } = req as RequestCustom
+        const { shiftId } = dto
 
+        const newShifts = await this.ShiftsRepository.update({ ...dto, userId: user.id }, { where: { userId: user.id, id: shiftId } });
+        if (!newShifts) throw new Error('нет такой смены')
+
+        return newShifts;
     }
 
 } 
