@@ -25,7 +25,7 @@ services:
       - .development.env
     environment:
       PG_DATA: /var/lib/postgresql/data
-      POSTGRES_PASSWORD: MyStrongPassword
+      POSTGRES_PASSWORD: fghjjhgf
     ports:
       - 5432:5432
     volumes:
