@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Request, UseGuards, UsePipes } from '@nestjs/common';
 import { ShiftsService } from "./shifts.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Shifts } from "./shifts.model";
@@ -11,6 +11,7 @@ import { CreateShiftsDto } from './dto/CreateShifts.dto ';
 import { DeleteShiftDto } from './dto/DeleteShift.dto';
 import { EditShiftsDto } from './dto/EditShifts.dto';
 import { GetShiftsByShopDto } from './dto/getShiftsByShop.dto';
+import { UsersShiftsDto } from './dto/UsersShifts.dto';
 
 @ApiTags('///')
 @Controller('shifts')
@@ -43,8 +44,8 @@ export class ShiftsController {
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Shifts] })
     @Get("")
-    getUsersShifts(@Request() req: Request) {
-        return this.ShiftsService.getUsersShifts(req)
+    getUsersShifts(@Request() req: Request, @Query() query: UsersShiftsDto) {
+        return this.ShiftsService.getUsersShifts(req, query)
     }
 
 
