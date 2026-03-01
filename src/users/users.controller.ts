@@ -38,15 +38,6 @@ export class UsersController {
 
 
 
-    @ApiOperation({summary: 'Получить всех пользователей'})
-    @ApiResponse({status: 200, type: [User]})
-    @Get("/Test")
-    getTest() {
-        return "Hello !"
-    }
-
-
-
     @ApiOperation({summary: 'Выдать роль'})
     @ApiResponse({status: 200})
     @Post('/role')

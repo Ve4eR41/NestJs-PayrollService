@@ -5,6 +5,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { RolesService } from "../roles/roles.service";
 import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
+import { Role } from 'src/roles/roles.model';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,7 @@ export class UsersService {
             return user;
         }
         catch (error) {
-            // Обрабатываем ошибки уникальности
+            // ошибки уникальности
             if (error.name === 'SequelizeUniqueConstraintError') {
                 throw new HttpException(
                     'Пользователь с таким именем уже существует',
@@ -33,7 +34,15 @@ export class UsersService {
     }
 
     async getAllUsers() {
-        const users = await this.userRepository.findAll({ include: { all: true } });
+        const users = await this.userRepository.findAll({
+            include: [{
+                model: Role,
+                as: 'roles',
+                attributes: ['value'],
+                through: { attributes: [] }
+            }],
+            attributes: { exclude: ['password'] }
+        });
         return users;
     }
 
