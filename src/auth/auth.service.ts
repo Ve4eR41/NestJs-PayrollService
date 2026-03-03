@@ -19,12 +19,12 @@ export class AuthService {
 
 
     async registration(userDto: CreateUserDto) {
-        const candidate = await this.userService.getUserByEmail(userDto.fio);
+        const candidate = await this.userService.getByEmail(userDto.fio);
         if (candidate) {
             throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const user = await this.userService.createUser({ ...userDto, password: hashPassword })
+        const user = await this.userService.create({ ...userDto, password: hashPassword })
         return this.generateToken(user)
     }
 
@@ -40,7 +40,7 @@ export class AuthService {
 
     
     private async validateUser(userDto: CreateUserDto) {
-        const user = await this.userService.getUserByEmail(userDto.fio);
+        const user = await this.userService.getByEmail(userDto.fio);
         const passwordEquals = await bcrypt.compare(userDto.password, user.password);
         if (user && passwordEquals) {
             return user;

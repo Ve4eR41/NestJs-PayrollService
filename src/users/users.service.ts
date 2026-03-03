@@ -6,6 +6,7 @@ import { RolesService } from "../roles/roles.service";
 import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { Role } from 'src/roles/roles.model';
+import { UpdateUserDto } from './dto/UpdateUser.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,9 @@ export class UsersService {
     constructor(@InjectModel(User) private userRepository: typeof User,
         private roleService: RolesService) { }
 
-    async createUser(dto: CreateUserDto) {
+
+
+    async create(dto: CreateUserDto) {
         try {
             const user = await this.userRepository.create(dto);
             const role = await this.roleService.getRoleByValue("ADMIN")
@@ -33,7 +36,21 @@ export class UsersService {
         }
     }
 
-    async getAllUsers() {
+
+
+    async edit(dto: UpdateUserDto) {
+        const user = await this.userRepository.findOne({ where: { id: dto.id } });
+        if (!user) throw new HttpException('Пользователь не существует', HttpStatus.NOT_FOUND)
+
+        const updedUser = await this.userRepository.update({ ...dto }, {
+            where: { id: user.id },
+        });
+        return updedUser;
+    }
+
+
+
+    async getAll() {
         const users = await this.userRepository.findAll({
             include: [{
                 model: Role,
@@ -46,10 +63,14 @@ export class UsersService {
         return users;
     }
 
-    async getUserByEmail(email: string) {
+
+
+    async getByEmail(email: string) {
         const user = await this.userRepository.findOne({ where: { fio: email }, include: { all: true } })
         return user;
     }
+
+
 
     async addRole(dto: AddRoleDto) {
         const user = await this.userRepository.findByPk(dto.userId);
@@ -60,6 +81,8 @@ export class UsersService {
         }
         throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND);
     }
+
+
 
     async ban(dto: BanUserDto) {
         const user = await this.userRepository.findByPk(dto.userId);
