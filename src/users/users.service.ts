@@ -7,6 +7,7 @@ import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { Role } from 'src/roles/roles.model';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
+import * as bcrypt from 'bcryptjs'
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,8 @@ export class UsersService {
 
     async create(dto: CreateUserDto) {
         try {
-            const user = await this.userRepository.create(dto);
+            const hashPassword = await bcrypt.hash(dto.password, 5);
+            const user = await this.userRepository.create({ ...dto, password: hashPassword });
             const role = await this.roleService.getRoleByValue("ADMIN")
             await user.$set('roles', [role.id])
             user.roles = [role]
