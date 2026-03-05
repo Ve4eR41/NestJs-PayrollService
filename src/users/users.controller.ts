@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UsersService } from "./users.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -19,15 +19,27 @@ export class UsersController {
 
 
 
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Получить всех пользователей' })
     @ApiResponse({ status: 200, type: [User] })
     @Get()
     getAll() {
         return this.usersService.getAll();
+    }  
+     
+    
+    
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Получить данные от текущего пользователя' })
+    @ApiResponse({ status: 200, type: [User] })
+    @Get('/thisUser')
+    getThisUser(@Request() req: Request) {
+        return this.usersService.getThisUser(req);
     }
 
 
 
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Изменить пользователя' })
     @ApiResponse({ status: 200, type: User })
     @Post()
@@ -37,6 +49,7 @@ export class UsersController {
 
 
 
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Создание пользователя' })
     @ApiResponse({ status: 200, type: User })
     @Post('/upd')
@@ -46,6 +59,7 @@ export class UsersController {
 
 
 
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Выдать роль' })
     @ApiResponse({ status: 200 })
     @Post('/role')
@@ -55,6 +69,7 @@ export class UsersController {
 
 
 
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Забанить пользователя' })
     @ApiResponse({ status: 200 })
     @Post('/ban')

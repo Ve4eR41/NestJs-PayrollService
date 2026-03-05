@@ -2,11 +2,11 @@ import { HttpException, HttpStatus, Injectable, Request } from '@nestjs/common';
 import { Shifts } from "./shifts.model";
 import { InjectModel } from "@nestjs/sequelize";
 import { Sequelize, Op, where } from 'sequelize';
-import RequestCustom from 'src/types/request.t';
 import { DeleteShiftDto } from './dto/DeleteShift.dto';
 import { CreateShiftsDto } from './dto/CreateShifts.dto ';
 import { EditShiftsDto } from './dto/EditShifts.dto';
 import { GetShiftsByShopDto } from './dto/getShiftsByShop.dto';
+import RequestCustom from 'src/types/request.t';
 import { UsersShiftsDto } from './dto/UsersShifts.dto';
 
 @Injectable()

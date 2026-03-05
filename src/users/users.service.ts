@@ -8,6 +8,8 @@ import { BanUserDto } from "./dto/ban-user.dto";
 import { Role } from 'src/roles/roles.model';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import * as bcrypt from 'bcryptjs'
+import RequestCustom from 'src/types/request.t';
+import { log } from 'node:console';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +26,7 @@ export class UsersService {
             const role = await this.roleService.getRoleByValue("ADMIN")
             await user.$set('roles', [role.id])
             user.roles = [role]
+            user.password = ''
             return user;
         }
         catch (error) {
@@ -48,6 +51,16 @@ export class UsersService {
             where: { id: user.id },
         });
         return updedUser;
+    }
+
+
+
+    async getThisUser(req: Request) {
+        const { user } = req as RequestCustom
+        console.log(user);
+        
+        const thisUser = await this.userRepository.findOne({ where: { id: user.id }, attributes: { exclude: ['password'] } });
+        return thisUser
     }
 
 
