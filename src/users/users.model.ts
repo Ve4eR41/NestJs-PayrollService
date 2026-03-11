@@ -3,6 +3,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../roles/roles.model";
 import { UserRoles } from "../roles/user-roles.model";
 import { Post } from "../posts/posts.model";
+import { UserJobs } from "src/job/user-job.model";
+import { Job } from "src/job/job.model";
 
 interface UserCreationAttrs {
     fio: string;
@@ -34,6 +36,8 @@ export class User extends Model<User, UserCreationAttrs> {
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 
-    //   job
+    @BelongsToMany(() => Job, () => UserJobs)
+    jobs: Job[];
+
     //   shop
 }

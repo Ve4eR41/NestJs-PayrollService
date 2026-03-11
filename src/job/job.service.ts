@@ -13,8 +13,8 @@ export class JobService {
         return job;
     }
 
-    async getByValue(value: string) {
-        const job = await this.jobRepository.findOne({where: {value}})
+    async getById(id: string) {
+        const job = await this.jobRepository.findOne({where: {id}})
         return job;
     }
 

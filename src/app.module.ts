@@ -14,6 +14,9 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import * as path from 'path';
 import { ShiftsModule } from "./shifts/shifts.module";
 import { Shifts } from "./shifts/shifts.model";
+import { JobsModule } from "./job/job.module";
+import { Job } from "./job/job.model";
+import { UserJobs } from "./job/user-job.model";
 
 @Module({
     controllers: [],
@@ -32,7 +35,7 @@ import { Shifts } from "./shifts/shifts.model";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, UserRoles, Post, Shifts],
+            models: [User, Role, UserRoles, Post, Shifts, Job, UserJobs],
             autoLoadModels: true
         }),
         UsersModule,
@@ -41,6 +44,7 @@ import { Shifts } from "./shifts/shifts.model";
         PostsModule,
         FilesModule,
         ShiftsModule,
+        JobsModule
     ]
 })
 export class AppModule { }

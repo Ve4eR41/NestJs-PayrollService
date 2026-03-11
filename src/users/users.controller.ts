@@ -10,6 +10,7 @@ import { AddRoleDto } from "./dto/add-role.dto";
 import { BanUserDto } from "./dto/ban-user.dto";
 import { ValidationPipe } from "../pipes/validation.pipe";
 import { UpdateUserDto } from './dto/UpdateUser.dto';
+import { AddJobDto } from './dto/add-job.dto';
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -66,6 +67,17 @@ export class UsersController {
     addRole(@Body() dto: AddRoleDto) {
         return this.usersService.addRole(dto);
     }
+
+
+
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Выдать должность' })
+    @ApiResponse({ status: 200 })
+    @Post('/addJob')
+    addJob(@Body() dto: AddJobDto) {
+        return this.usersService.addJob(dto);
+    }
+
 
 
 

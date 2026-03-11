@@ -17,7 +17,7 @@ export class JobsController {
 
     @Get('/:value')
     getByValue(@Param('value') value: string) {
-        return this.jobService.getByValue(value);
+        return this.jobService.getById(value);
     }
 
 

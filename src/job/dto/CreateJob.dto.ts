@@ -1,4 +1,10 @@
+import { IsNumber, IsString } from "class-validator";
+
 export class CreateJobDto {
-    readonly value: string;
+
+    @IsNumber()
+    readonly value: number;
+
+    @IsString()
     readonly description: string;
 }

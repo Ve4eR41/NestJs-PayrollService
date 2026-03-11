@@ -10,11 +10,15 @@ import { UpdateUserDto } from './dto/UpdateUser.dto';
 import * as bcrypt from 'bcryptjs'
 import RequestCustom from 'src/types/request.t';
 import { log } from 'node:console';
+import { Job } from 'src/job/job.model';
+import { AddJobDto } from './dto/add-job.dto';
+import { JobService } from 'src/job/job.service';
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
+        private jobService: JobService,
         private roleService: RolesService) { }
 
 
@@ -44,12 +48,16 @@ export class UsersService {
 
 
     async edit(dto: UpdateUserDto) {
+        const { job } = dto
         const user = await this.userRepository.findOne({ where: { id: dto.id } });
         if (!user) throw new HttpException('Пользователь не существует', HttpStatus.NOT_FOUND)
 
         const updedUser = await this.userRepository.update({ ...dto }, {
             where: { id: user.id },
         });
+
+        if (job) await user.$set('jobs', [job])
+
         return updedUser;
     }
 
@@ -58,8 +66,24 @@ export class UsersService {
     async getThisUser(req: Request) {
         const { user } = req as RequestCustom
         console.log(user);
-        
-        const thisUser = await this.userRepository.findOne({ where: { id: user.id }, attributes: { exclude: ['password'] } });
+
+        const thisUser = await this.userRepository.findOne({
+            where: { id: user.id }, attributes: {
+                exclude: ['password']
+            },
+            include: [{
+                model: Role,
+                as: 'roles',
+                attributes: ['value'],
+                through: { attributes: [] }
+            },
+            {
+                model: Job,
+                as: 'jobs',
+                attributes: ['value', 'description'],
+                through: { attributes: [] }
+            }]
+        });
         return thisUser
     }
 
@@ -71,6 +95,12 @@ export class UsersService {
                 model: Role,
                 as: 'roles',
                 attributes: ['value'],
+                through: { attributes: [] }
+            },
+            {
+                model: Job,
+                as: 'jobs',
+                attributes: ['value', 'description'],
                 through: { attributes: [] }
             }],
             attributes: { exclude: ['password'] }
@@ -92,6 +122,18 @@ export class UsersService {
         const role = await this.roleService.getRoleByValue(dto.value);
         if (role && user) {
             await user.$add('role', role.id);
+            return dto;
+        }
+        throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND);
+    }
+
+
+
+    async addJob(dto: AddJobDto) {
+        const user = await this.userRepository.findByPk(dto.userId);
+        const job = await this.jobService.getById(dto.id);
+        if (job && user) {
+            await user.$add('job', job.id);
             return dto;
         }
         throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND);
