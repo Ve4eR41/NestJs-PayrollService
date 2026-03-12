@@ -7,6 +7,7 @@ export class EditShiftsDto {
     readonly timeStart: Date;
 
     @ApiProperty({ example:"2025-05-28T18:31:08.810Z", description:"Дата и время конца смены"})
+    @IsDateString()
     readonly timeEnd: Date;
 
     @ApiProperty({ example:"1", description:"shop id"})

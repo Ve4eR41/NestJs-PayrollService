@@ -3,6 +3,6 @@ import { IsDateString, IsNumber } from "class-validator";
 
 export class DeleteShiftDto {
     @ApiProperty({ example:"1", description:"ID смены"})
-    @IsDateString()
+    @IsNumber()
     readonly shiftId: number;
 }
