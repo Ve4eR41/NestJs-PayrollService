@@ -23,6 +23,6 @@ export class JobsController {
 
     @Get('')
     getALL() {
-        return this.jobService.get();
+        return this.jobService.getAll();
     }
 }
