@@ -8,6 +8,7 @@ import { EditShiftsDto } from './dto/EditShifts.dto';
 import { GetShiftsByShopDto } from './dto/getShiftsByShop.dto';
 import RequestCustom from 'src/types/request.t';
 import { UsersShiftsDto } from './dto/UsersShifts.dto';
+import { log } from 'node:console';
 
 @Injectable()
 export class ShiftsService {
@@ -26,6 +27,9 @@ export class ShiftsService {
     async getUsersShifts(req: Request, dto: UsersShiftsDto) {
         const { user } = req as RequestCustom
         const { timeEnd, timeStart } = dto;
+
+        console.log(dto);
+        
         
         const shifts = (async () => {
             if (timeEnd && timeStart)
