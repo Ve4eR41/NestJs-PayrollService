@@ -48,15 +48,13 @@ export class UsersService {
 
 
     async edit(dto: UpdateUserDto) {
-        const { job } = dto
+        const { jobs, ...restDto } = dto
         const user = await this.userRepository.findOne({ where: { id: dto.id } });
         if (!user) throw new HttpException('Пользователь не существует', HttpStatus.NOT_FOUND)
 
-        const updedUser = await this.userRepository.update({ ...dto }, {
-            where: { id: user.id },
-        });
-
-        if (job) await user.$set('jobs', [job])
+        if (jobs) await user.$set('jobs', jobs[0].value)
+        const updateData: Partial<User> = { ...restDto };
+        const updedUser = await this.userRepository.update(restDto, { where: { id: user.id }, });
 
         return updedUser;
     }

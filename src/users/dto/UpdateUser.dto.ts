@@ -1,13 +1,20 @@
-import {ApiProperty} from "@nestjs/swagger";
-import { IsBoolean, IsNumber, isNumber, IsOptional, IsString, Length} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsBoolean, IsNumber, isNumber, IsOptional, IsString, Length } from "class-validator";
+
+
+class JobDto {
+    @IsNumber()
+    value: number;
+}
+
 
 export class UpdateUserDto {
 
     @IsNumber()
     readonly id: number;
 
-    @ApiProperty({example: 'user@mail.ru', description: 'Почта'})
-    @IsString({message: 'Должно быть строкой'})
+    @ApiProperty({ example: 'user@mail.ru', description: 'Почта' })
+    @IsString({ message: 'Должно быть строкой' })
     @IsOptional()
     readonly fio?: string;
 
@@ -15,9 +22,8 @@ export class UpdateUserDto {
     @IsOptional()
     readonly shop?: number;
 
-    @IsNumber()
     @IsOptional()
-    readonly job?: number;
+    readonly jobs?: JobDto;
 
     @IsBoolean()
     @IsOptional()
@@ -26,5 +32,6 @@ export class UpdateUserDto {
     @IsNumber()
     @IsOptional()
     readonly role?: number;
- 
+
 }
+
