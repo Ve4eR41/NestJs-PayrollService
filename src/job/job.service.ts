@@ -19,7 +19,6 @@ export class JobService {
         return job;
     }
 
-    @Delay(2000)
     async getAll() {
         const jobs = await this.jobRepository.findAll();
         return jobs

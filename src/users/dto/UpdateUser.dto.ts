@@ -4,7 +4,11 @@ import { IsBoolean, IsNumber, isNumber, IsOptional, IsString, Length } from "cla
 
 class JobDto {
     @IsNumber()
-    value: number;
+    id: number;
+}
+class RoleDto {
+    @IsNumber()
+    id: number;
 }
 
 
@@ -29,9 +33,8 @@ export class UpdateUserDto {
     @IsOptional()
     readonly banned?: boolean;
 
-    @IsNumber()
     @IsOptional()
-    readonly role?: number;
+    readonly roles?: RoleDto;
 
 }
 
