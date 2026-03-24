@@ -40,7 +40,7 @@ export class RolesGuard implements CanActivate {
             const isAccess = user.roles.some(role => requiredRoles.includes(role.value));
             if (!isAccess) throw new HttpException('Нет доступа', HttpStatus.FORBIDDEN)
 
-
+            return true
         } catch (e) {
             throw new HttpException('Нет доступа', HttpStatus.FORBIDDEN)
         }
