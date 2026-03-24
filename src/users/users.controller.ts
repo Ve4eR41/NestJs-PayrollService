@@ -14,23 +14,23 @@ import { AddJobDto } from './dto/add-job.dto';
 
 @ApiTags('Пользователи')
 @Controller('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
 
     constructor(private usersService: UsersService) { }
 
 
 
-    @UseGuards(JwtAuthGuard)
+    @Roles('ADMIN')
     @ApiOperation({ summary: 'Получить всех пользователей' })
     @ApiResponse({ status: 200, type: [User] })
     @Get()
     getAll() {
         return this.usersService.getAll();
-    }  
-     
-    
-    
-    @UseGuards(JwtAuthGuard)
+    }
+
+
+
     @ApiOperation({ summary: 'Получить данные от текущего пользователя' })
     @ApiResponse({ status: 200, type: [User] })
     @Get('/thisUser')
@@ -40,7 +40,6 @@ export class UsersController {
 
 
 
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Изменить пользователя' })
     @ApiResponse({ status: 200, type: User })
     @Post()
@@ -50,7 +49,7 @@ export class UsersController {
 
 
 
-    @UseGuards(JwtAuthGuard)
+    @Roles('ADMIN')
     @ApiOperation({ summary: 'Создание пользователя' })
     @ApiResponse({ status: 200, type: User })
     @Post('/upd')
@@ -60,7 +59,6 @@ export class UsersController {
 
 
 
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Выдать роль' })
     @ApiResponse({ status: 200 })
     @Post('/role')
@@ -70,7 +68,6 @@ export class UsersController {
 
 
 
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Выдать должность' })
     @ApiResponse({ status: 200 })
     @Post('/addJob')
@@ -81,7 +78,6 @@ export class UsersController {
 
 
 
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Забанить пользователя' })
     @ApiResponse({ status: 200 })
     @Post('/ban')
