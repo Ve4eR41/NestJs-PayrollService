@@ -89,4 +89,15 @@ export class ShiftsController {
     }
 
 
+
+
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: '...' })
+    @ApiResponse({ status: 200, type: [Shifts] })
+    @Post("/getShiftsByShop")
+    getShiftsByFullInfo(@Body() dto: GetShiftsByShopDto, @Request() req: Request) {
+        return this.ShiftsService.getShiftsFullInfo(dto, req)
+    }
+
+
 }

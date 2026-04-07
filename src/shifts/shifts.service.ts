@@ -29,8 +29,8 @@ export class ShiftsService {
         const { timeEnd, timeStart } = dto;
 
         console.log(dto);
-        
-        
+
+
         const shifts = (async () => {
             if (timeEnd && timeStart)
                 return await this.ShiftsRepository.findAll({ where: { userId: user.id, timeStart: { [Op.gte]: timeStart, [Op.lte]: timeEnd } } });
@@ -79,10 +79,15 @@ export class ShiftsService {
 
     async getShiftsByShop(dto: GetShiftsByShopDto, req: Request) {
         const { startDate, endDate, shopName } = dto;
-        // const _date = new Date(date)
-        // const startOfMonth = new Date(_date.getFullYear(), _date.getMonth(), 1);
-        // const endOfMonth = new Date(_date.getFullYear(), _date.getMonth() + 1, 0, 23, 59, 59, 999);
         const shifts = await this.ShiftsRepository.findAll({ where: { shopName, timeStart: { [Op.gte]: startDate, [Op.lte]: endDate } } });
+        return shifts;
+    }
+
+
+    async getShiftsFullInfo(dto: GetShiftsByShopDto, req: Request) {
+        const { startDate, endDate, shopName } = dto;
+        
+        const shifts = await this.ShiftsRepository.findAll({ include: { all: true }, where: { shopName, timeStart: { [Op.gte]: startDate, [Op.lte]: endDate } } });
         return shifts;
     }
 
