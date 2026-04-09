@@ -7,14 +7,18 @@ import RequestCustom from 'src/types/request.t';
 export class OpenshiftService {
   constructor(@InjectModel(Openshift) private openshiftRepository: typeof Openshift) { }
 
-  isOpen(req: RequestCustom) {
+  async isOpen(req: RequestCustom) {
     const { user } = req
-
+    const { timeStart } = await this.openshiftRepository.findOne({ where: { userid: user.id } })
+    return {
+      isOpen: !!timeStart,
+      timeStart
+    }
   }
 
-  
 
-  open(req: RequestCustom) {
+
+  async open(req: RequestCustom) {
     const { user } = req
     this.openshiftRepository.create({ userid: user.id })
   }
