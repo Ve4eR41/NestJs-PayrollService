@@ -17,6 +17,8 @@ import { Shifts } from "./shifts/shifts.model";
 import { JobsModule } from "./job/job.module";
 import { Job } from "./job/job.model";
 import { UserJobs } from "./job/user-job.model";
+import { OpenshiftModule } from './openshift/openshift.module';
+import { Openshift } from "./openshift/openshift.model";
 
 @Module({
     controllers: [],
@@ -35,7 +37,7 @@ import { UserJobs } from "./job/user-job.model";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, UserRoles, Post, Shifts, Job, UserJobs],
+            models: [User, Role, UserRoles, Post, Shifts, Job, UserJobs, Openshift],
             autoLoadModels: true
         }),
         UsersModule,
@@ -44,7 +46,8 @@ import { UserJobs } from "./job/user-job.model";
         PostsModule,
         FilesModule,
         ShiftsModule,
-        JobsModule
+        JobsModule,
+        OpenshiftModule
     ]
 })
 export class AppModule { }
