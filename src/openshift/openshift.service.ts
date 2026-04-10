@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from "@nestjs/sequelize";
 import { Openshift } from './openshift.model';
 import RequestCustom from 'src/types/request.t';
+import { User } from 'src/users/users.model';
 
 @Injectable()
 export class OpenshiftService {
@@ -26,7 +27,9 @@ export class OpenshiftService {
 
 
   async getAll() {
-    const openshifts = await this.openshiftRepository.findAll()
+    const openshifts = await this.openshiftRepository.findAll({
+      include: { all: true, attributes: { exclude: ['password', 'banReason', 'createdAt', 'updatedAt'] } },
+    })
     return openshifts;
   }
 
