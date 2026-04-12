@@ -3,8 +3,8 @@ import { OpenshiftController } from './openshift.controller';
 import { OpenshiftService } from './openshift.service';
 import { Openshift } from './openshift.model';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { RolesModule } from 'src/roles/roles.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { ShiftsModule } from 'src/shifts/shifts.module';
 
 @Module({
     controllers: [OpenshiftController],
@@ -12,6 +12,7 @@ import { AuthModule } from 'src/auth/auth.module';
     imports: [
         SequelizeModule.forFeature([Openshift]),
         forwardRef(() => AuthModule),
+        forwardRef(() => ShiftsModule),
     ],
     exports: [OpenshiftService]
 })

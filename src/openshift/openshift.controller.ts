@@ -7,7 +7,7 @@ import { OpenshiftService } from './openshift.service';
 import { Roles } from 'src/auth/roles-auth.decorator';
 
 @ApiTags('Для отслеживания и хранения открытой смены пользователей')
-@Controller('openshift')
+@Controller('shifts/openshift')
 export class OpenshiftController {
     constructor(private OpenshiftService: OpenshiftService) { }
 
@@ -20,12 +20,22 @@ export class OpenshiftController {
         return this.OpenshiftService.open(req)
     }
 
-j
+    
 
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Openshift] })
-    @Post("/isOpen")
+    @Post("/close")
+    close(@Request() req: RequestCustom) {
+        return this.OpenshiftService.close(req)
+    }
+
+
+
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: '...' })
+    @ApiResponse({ status: 200, type: [Openshift] })
+    @Get("/isOpen")
     isOpen(@Request() req: RequestCustom) {
         return this.OpenshiftService.isOpen(req)
     }

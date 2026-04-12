@@ -8,6 +8,7 @@ import { DeleteShiftDto } from './dto/DeleteShift.dto';
 import { EditShiftsDto } from './dto/EditShifts.dto';
 import { GetShiftsByShopDto } from './dto/getShiftsByShop.dto';
 import { UsersShiftsDto } from './dto/UsersShifts.dto';
+import RequestCustom from 'src/types/request.t';
 
 @ApiTags('///')
 @Controller('shifts')
@@ -50,7 +51,7 @@ export class ShiftsController {
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Shifts] })
     @Post("/create")
-    create(@Body() dto: CreateShiftsDto, @Request() req: Request) {
+    create(@Body() dto: CreateShiftsDto, @Request() req: RequestCustom) {
         return this.ShiftsService.create(dto, req)
     }
 

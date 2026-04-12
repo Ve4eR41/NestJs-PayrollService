@@ -44,8 +44,8 @@ export class ShiftsService {
 
 
 
-    async create(dto: CreateShiftsDto, req: Request) {
-        const { user } = req as RequestCustom
+    async create(dto: CreateShiftsDto, req: RequestCustom) {
+        const { user } = req
         const newShifts = await this.ShiftsRepository.create({ ...dto, userId: user.id });
         return newShifts;
     }
