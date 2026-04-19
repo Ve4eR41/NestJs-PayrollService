@@ -1,6 +1,7 @@
-import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, HasMany, Model, Table, ForeignKey } from "sequelize-typescript";
 import { ApiProperty } from "@nestjs/swagger";
 import { Shifts } from "src/shifts/shifts.model";
+import { RetailPlan } from "src/retail-plan/retail-plan.model";
 
 interface ShopCreationAttrs {
     name: string;
@@ -17,6 +18,14 @@ export class Shop extends Model<Shop, ShopCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: false })
     name: string;
 
+    @ForeignKey(() => RetailPlan)
+    @ApiProperty({ example: '1', description: 'Идентификатор розничного плана (1:1)' })
+    @Column({ type: DataType.INTEGER, allowNull: true, unique: true })
+    retailPlanId: number | null;
+
     @HasMany(() => Shifts, { foreignKey: 'shopName' })
     shifts: Shifts[];
+
+    @BelongsTo(() => RetailPlan)
+    retailPlan: RetailPlan;
 }
