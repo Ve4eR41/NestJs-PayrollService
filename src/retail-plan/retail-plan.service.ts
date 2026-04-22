@@ -22,6 +22,11 @@ export class RetailPlanService {
         return retailPlans;
     }
 
+    async getByDate(date: Date) {
+        const retailPlans = await this.retailPlanRepository.findAll({ where: { date } });
+        return retailPlans;
+    }
+
     async getAll() {
         const retailPlans = await this.retailPlanRepository.findAll();
         return retailPlans

@@ -6,12 +6,14 @@ import { Shifts } from 'src/shifts/shifts.model';
 import { ShiftType } from 'src/shiftType/shiftType.model';
 import { User } from 'src/users/users.model';
 import { CalcPayrollDto } from './dto/CalcPayroll.dto';
+import { RetailPlanService } from 'src/retail-plan/retail-plan.service';
 
 @Injectable()
 export class PayrollService {
     constructor(
         @InjectModel(Shifts) private shiftsRepository: typeof Shifts,
-        @InjectModel(User) private usersRepository: typeof User
+        @InjectModel(User) private usersRepository: typeof User,
+        private retailPlanService: RetailPlanService,
     ) { }
 
 
@@ -69,15 +71,31 @@ export class PayrollService {
             };
         });
 
-        const workTime = calcedShifts.reduce((acc, i) => acc + i.workTime, 0);
-        const hourlyRate = calcedShifts.reduce((acc, i) => acc + i.hourlyRate, 0);
+        //
+        const retailPlan = await this.calcRetailPlan(dto, shifts)
+
+        const workTime = calcedShifts.reduce((acc, s) => acc + s.workTime, 0);
+        const hourlyRate = calcedShifts.reduce((acc, s) => acc + s.hourlyRate, 0);
         const summ = workTime
 
         return {
+            ...retailPlan,
             userId,
             total: { workTime, hourlyRate, summ },
             calcedShifts
         };
+    }
+
+    async calcRetailPlan(dto: CalcPayrollDto, shifts: Shifts[]) {
+        const { timeStart } = dto;
+        const summRevenue = shifts.reduce((acc, s) => acc + s.revenue, 0);
+
+        const retailPlan = await this.retailPlanService.getByDate(timeStart)
+        const summPlan = retailPlan.reduce((acc, rp) => acc + rp.value, 0)
+
+        const isCompletedPlan = summRevenue >= summPlan;
+
+        return { summPlan, summRevenue, isCompletedPlan }
     }
 }
 

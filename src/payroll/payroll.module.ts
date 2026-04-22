@@ -7,12 +7,14 @@ import { ShiftType } from 'src/shiftType/shiftType.model';
 import { User } from 'src/users/users.model';
 import { PayrollController } from './payroll.controller';
 import { PayrollService } from './payroll.service';
+import { RetailPlansModule } from 'src/retail-plan/retail-plan.module';
 
 @Module({
     controllers: [PayrollController],
     providers: [PayrollService],
     imports: [
         SequelizeModule.forFeature([Shifts, User, Job, ShiftType]),
+        RetailPlansModule,
         forwardRef(() => AuthModule)
     ],
     exports: [PayrollService]
