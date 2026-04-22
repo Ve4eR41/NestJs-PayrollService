@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsDateString, IsNumber, IsString } from "class-validator";
 
 export class CreateRetailPlanDto {
 
@@ -7,4 +7,10 @@ export class CreateRetailPlanDto {
 
     @IsString()
     readonly description: string;
+
+    @IsNumber()
+    readonly shopId: number;
+
+    @IsDateString()
+    readonly date: Date;
 }

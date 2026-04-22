@@ -14,8 +14,12 @@ export class RetailPlanService {
     }
 
     async getByShopId(id: string) {
-        const retailPlan = await this.retailPlanRepository.findOne({ where: { id } })
-        return retailPlan;
+        const shopId = Number(id);
+        const retailPlans = await this.retailPlanRepository.findAll({
+            where: { shopId },
+            order: [['date', 'DESC']],
+        });
+        return retailPlans;
     }
 
     async getAll() {

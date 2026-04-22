@@ -19,7 +19,7 @@ export class ShopService {
     }
 
     async getAll() {
-        const shops = await this.shopRepository.findAll();
+        const shops = await this.shopRepository.findAll({ include: { all: true } });
         return shops;
     }
 }
