@@ -4,12 +4,14 @@ import { Openshift } from './openshift.model';
 import RequestCustom from 'src/types/request.t';
 import { User } from 'src/users/users.model';
 import { ShiftsService } from 'src/shifts/shifts.service';
+import { ShiftType } from 'src/shiftType/shiftType.model';
 
 @Injectable()
 export class OpenshiftService {
 
   constructor(
     @InjectModel(Openshift) private openshiftRepository: typeof Openshift,
+    @InjectModel(ShiftType) private shiftTypeRepository: typeof ShiftType,
     private shiftsService: ShiftsService
   ) { }
 
@@ -20,12 +22,16 @@ export class OpenshiftService {
     const openshift = await this.openshiftRepository.findOne({ where: { userid: user.id } })
     if (!openshift) throw new HttpException('Смена не открыта', HttpStatus.BAD_REQUEST)
 
+    const shiftType = await this.shiftTypeRepository.findOne({ where: { name: 'Смена' } })
+    if (!shiftType) throw new HttpException('Не найден ShiftType "смена"', HttpStatus.BAD_REQUEST)
+
     const shift = await this.shiftsService.create({
       timeStart: openshift.timeStart,
       timeEnd: new Date(),
       shopName: 0,
       revenue: 0,
-      cheks: 0
+      cheks: 0,
+      shiftTypeId: shiftType.id
     }, req)
     if (!shift) throw new HttpException('Не удалось создать смену', HttpStatus.BAD_REQUEST)
 

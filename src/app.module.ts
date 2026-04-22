@@ -25,6 +25,7 @@ import { Shop } from "./shop/shop.model";
 import { ShopModule } from "./shop/shop.module";
 import { ShiftTypeModule } from "./shiftType/shiftType.module";
 import { ShiftType } from "./shiftType/shiftType.model";
+import { PayrollModule } from "./payroll/payroll.module";
 
 @Module({
     controllers: [],
@@ -56,7 +57,8 @@ import { ShiftType } from "./shiftType/shiftType.model";
         RetailPlansModule,
         OpenshiftModule,
         ShopModule,
-        ShiftTypeModule
+        ShiftTypeModule,
+        PayrollModule
     ]
 })
 export class AppModule { }

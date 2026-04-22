@@ -21,4 +21,8 @@ export class CreateShiftsDto {
     @ApiProperty({ example:"10000", description:"cheks for shifts"})
     @IsNumber({}, { message: "Должно быть числом" })
     readonly cheks: number;
+
+    @ApiProperty({ example: 1, description: "ID типа смены (например: смена/выходной/обучение)" })
+    @IsNumber({}, { message: "Должно быть числом" })
+    readonly shiftTypeId: number;
 }

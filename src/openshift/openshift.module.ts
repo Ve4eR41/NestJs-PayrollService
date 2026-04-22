@@ -5,12 +5,13 @@ import { Openshift } from './openshift.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthModule } from 'src/auth/auth.module';
 import { ShiftsModule } from 'src/shifts/shifts.module';
+import { ShiftType } from 'src/shiftType/shiftType.model';
 
 @Module({
     controllers: [OpenshiftController],
     providers: [OpenshiftService],
     imports: [
-        SequelizeModule.forFeature([Openshift]),
+        SequelizeModule.forFeature([Openshift, ShiftType]),
         forwardRef(() => AuthModule),
         forwardRef(() => ShiftsModule),
     ],

@@ -22,6 +22,10 @@ export class EditShiftsDto {
     @IsNumber({}, { message: "Должно быть числом" })
     readonly cheks: number;
 
+    @ApiProperty({ example: 1, description: "ID типа смены (например: смена/выходной/обучение)" })
+    @IsNumber({}, { message: "Должно быть числом" })
+    readonly shiftTypeId: number;
+
     @ApiProperty({ example:"1", description:"ID Смены"})
     @IsNumber({}, { message: "Должно быть числом" })
     readonly shiftId: number;

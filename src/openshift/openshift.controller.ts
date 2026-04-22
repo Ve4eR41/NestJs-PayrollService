@@ -21,7 +21,6 @@ export class OpenshiftController {
     }
 
     
-
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Openshift] })

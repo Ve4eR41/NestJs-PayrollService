@@ -3,6 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 interface ShiftTypeCreationAttrs {
     name: string;
+    value: number;
 }
 
 @Table({ tableName: 'shift_types' })
@@ -15,4 +16,8 @@ export class ShiftType extends Model<ShiftType, ShiftTypeCreationAttrs> {
     @ApiProperty({ example: 'Дневная смена', description: 'Название типа смены' })
     @Column({ type: DataType.STRING, allowNull: false })
     name: string;
+
+    @ApiProperty({ example: '250', description: 'Почасовая ставка' })
+    @Column({ type: DataType.NUMBER, allowNull: false })
+    value: number;
 }

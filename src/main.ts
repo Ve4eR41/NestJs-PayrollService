@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { JwtAuthGuard } from "./auth/jwt-auth.guard";
 import { ValidationPipe } from "./pipes/validation.pipe";
+import { Sequelize } from "sequelize-typescript";
 
 
 async function start() {
@@ -22,6 +23,10 @@ async function start() {
 
     app.useGlobalPipes(new ValidationPipe())
 
+    if (process.env.DB_SYNC === 'alter') {
+        const sequelize = app.get(Sequelize);
+        await sequelize.sync({ alter: true });
+    }
 
     await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`))
 }
