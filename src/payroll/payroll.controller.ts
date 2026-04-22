@@ -12,7 +12,7 @@ export class PayrollController {
     @Post('/calc')
     calc(@Request() req: Request, @Body() dto: CalcPayrollDto) {
         const { user } = req as RequestCustom;
-        return this.payrollService.calcForUser(user.id, dto);
+        return this.payrollService.calcPayroll(user.id, dto);
     }
 }
 

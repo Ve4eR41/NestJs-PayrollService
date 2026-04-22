@@ -18,13 +18,32 @@ export class PayrollService {
 
 
 
+    async calcPayroll(userId: number, dto: CalcPayrollDto) {
+        const { calcedShifts, shifts } = await this.calcWorkTime(dto, userId)
+        const retailPlan = await this.calcRetailPlan(dto, shifts)
+
+        const workTime = calcedShifts.reduce((acc, s) => acc + s.workTime, 0);
+        const hourlyRate = calcedShifts.reduce((acc, s) => acc + s.hourlyRate, 0);
+        const summ = workTime
+
+        return {
+            ...retailPlan,
+            userId,
+            total: { workTime, hourlyRate, summ },
+            calcedShifts
+        };
+    }
+
+
+
     private hoursBetween(start: Date, end: Date) {
         const ms = new Date(end).getTime() - new Date(start).getTime();
         return ms > 0 ? ms / 3600000 : 0;
     }
 
 
-    async calcForUser(userId: number, dto: CalcPayrollDto) {
+    // выплата за рабочее время
+    private async calcWorkTime(dto: CalcPayrollDto, userId: number) {
         const { timeStart, timeEnd } = dto;
         const { userRate } = await (async () => {
             const user = await this.usersRepository.findOne({
@@ -47,11 +66,13 @@ export class PayrollService {
 
         const calcedShifts = shifts.map((shift) => {
             const workTime = this.hoursBetween(shift.timeStart, shift.timeEnd);
+
             const typeName = (() => {
                 const typeName = shift.shiftType?.name?.toLowerCase();
                 if (!typeName) throw new HttpException(`Для смены id=${shift.id} не задан тип (shiftTypeId)`, HttpStatus.BAD_REQUEST);
                 return typeName;
             })();
+
             const rate = (() => {
                 if (typeName === 'смена') return userRate;
                 const rate = shift.shiftType?.value;
@@ -71,22 +92,13 @@ export class PayrollService {
             };
         });
 
-        //
-        const retailPlan = await this.calcRetailPlan(dto, shifts)
-
-        const workTime = calcedShifts.reduce((acc, s) => acc + s.workTime, 0);
-        const hourlyRate = calcedShifts.reduce((acc, s) => acc + s.hourlyRate, 0);
-        const summ = workTime
-
-        return {
-            ...retailPlan,
-            userId,
-            total: { workTime, hourlyRate, summ },
-            calcedShifts
-        };
+        return { shifts, calcedShifts }
     }
 
-    async calcRetailPlan(dto: CalcPayrollDto, shifts: Shifts[]) {
+
+
+    // выплата за выполнение плана (пока не выплата)
+    private async calcRetailPlan(dto: CalcPayrollDto, shifts: Shifts[]) {
         const { timeStart } = dto;
         const summRevenue = shifts.reduce((acc, s) => acc + s.revenue, 0);
 
