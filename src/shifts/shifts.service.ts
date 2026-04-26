@@ -9,6 +9,9 @@ import { GetShiftsByShopDto } from './dto/getShiftsByShop.dto';
 import RequestCustom from 'src/types/request.t';
 import { UsersShiftsDto } from './dto/UsersShifts.dto';
 import { log } from 'node:console';
+import { GetShiftsFullInfoDto } from './dto/getShiftsFullInfo.dto';
+import { User } from 'src/users/users.model';
+import { ShiftType } from 'src/shiftType/shiftType.model';
 
 @Injectable()
 export class ShiftsService {
@@ -84,10 +87,32 @@ export class ShiftsService {
     }
 
 
-    async getShiftsFullInfo(dto: GetShiftsByShopDto, req: Request) {
-        const { startDate, endDate, shopName } = dto;
-        
-        const shifts = await this.ShiftsRepository.findAll({ include: { all: true }, where: { shopName, timeStart: { [Op.gte]: startDate, [Op.lte]: endDate } } });
+
+    async getShiftsFullInfo(dto: GetShiftsFullInfoDto, req: Request) {
+        const { startDate, endDate } = dto;
+
+        const shifts = await this.ShiftsRepository.findAll({
+            attributes: {
+                include: [
+                    [Sequelize.col('user.fio'), 'fio'],
+                    [Sequelize.col('shiftType.name'), 'shiftTypeName'],
+                ]
+            },
+            include: [{
+                model: User,
+                attributes: [],
+            },
+            {
+                model: ShiftType,
+                attributes: [],
+            }],
+            where: {
+                timeStart: {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate
+                }
+            }
+        });
         return shifts;
     }
 

@@ -9,21 +9,13 @@ import { EditShiftsDto } from './dto/EditShifts.dto';
 import { GetShiftsByShopDto } from './dto/getShiftsByShop.dto';
 import { UsersShiftsDto } from './dto/UsersShifts.dto';
 import RequestCustom from 'src/types/request.t';
+import { GetShiftsFullInfoDto } from './dto/getShiftsFullInfo.dto';
 
 @ApiTags('///')
 @Controller('shifts')
 export class ShiftsController {
 
     constructor(private ShiftsService: ShiftsService) { }
-
-
-
-    @ApiOperation({ summary: 'тестовый запрос для проверки того что все работает' })
-    @ApiResponse({ status: 200, type: [Shifts] })
-    @Get("/test")
-    getTest() {
-        return "Hello !"
-    }
 
 
 
@@ -91,8 +83,8 @@ export class ShiftsController {
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: '...' })
     @ApiResponse({ status: 200, type: [Shifts] })
-    @Post("/getShiftsByShop")
-    getShiftsByFullInfo(@Body() dto: GetShiftsByShopDto, @Request() req: Request) {
+    @Post("/getShiftsFullInfo")
+    getShiftsByFullInfo(@Body() dto: GetShiftsFullInfoDto, @Request() req: Request) {
         return this.ShiftsService.getShiftsFullInfo(dto, req)
     }
 

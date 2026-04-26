@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "src/users/users.model";
 import { ShiftType } from "src/shiftType/shiftType.model";
@@ -27,12 +27,13 @@ export class Shifts extends Model<Shifts, ShiftsCreationAttrs> {
     @ForeignKey(() => User)
     @Column({ type: DataType.INTEGER })
     userId: number;
+    @BelongsTo(() => User)
+    user: User;
 
     @ApiProperty({ example: '2', description: 'Тип смены' })
     @ForeignKey(() => ShiftType)
-    @Column({ type: DataType.INTEGER, allowNull: false  })
+    @Column({ type: DataType.INTEGER, allowNull: false })
     shiftTypeId: number;
-    
     @BelongsTo(() => ShiftType)
     shiftType: ShiftType;
 
