@@ -68,8 +68,9 @@ export class OpenshiftService {
           [Sequelize.col('user.fio'), 'fio'],
         ]
       },
-      include: [{ model: User, attributes: [] }],
+      include: { model: User, attributes: [] },
     })
+    
     return openshifts;
   }
 
