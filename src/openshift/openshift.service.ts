@@ -5,6 +5,7 @@ import RequestCustom from 'src/types/request.t';
 import { User } from 'src/users/users.model';
 import { ShiftsService } from 'src/shifts/shifts.service';
 import { ShiftType } from 'src/shiftType/shiftType.model';
+import { Sequelize, UUID } from 'sequelize';
 
 @Injectable()
 export class OpenshiftService {
@@ -62,7 +63,12 @@ export class OpenshiftService {
 
   async getAll() {
     const openshifts = await this.openshiftRepository.findAll({
-      include: { all: true, attributes: { exclude: ['password', 'banReason', 'createdAt', 'updatedAt'] } },
+      attributes: {
+        include: [
+          [Sequelize.col('user.fio'), 'fio'],
+        ]
+      },
+      include: [{ model: User, attributes: [] }],
     })
     return openshifts;
   }
