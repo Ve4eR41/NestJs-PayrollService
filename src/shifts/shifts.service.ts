@@ -68,13 +68,15 @@ export class ShiftsService {
 
 
     async edit(dto: EditShiftsDto, req: Request) {
-        const { user } = req as RequestCustom
-        const { shiftId } = dto
+        const { user } = req as RequestCustom;
+        const isAdmin = user.roles.some(role => role.value === 'ADMIN');
+        const { shiftId } = dto;
 
-        const shift = await this.ShiftsRepository.findOne({ where: { userId: user.id, id: shiftId } });
+        const where = isAdmin ? { id: shiftId } : { userId: user.id, id: shiftId }
+        const shift = await this.ShiftsRepository.findOne({ where });
         if (!shift) throw new HttpException('Смена не существует', HttpStatus.NOT_FOUND)
-        this.noMoreDaysLimit(shift.timeStart)
-        const updedShifts = await this.ShiftsRepository.update({ ...dto, userId: user.id }, { where: { userId: user.id, id: shiftId } });
+        if (!isAdmin) this.noMoreDaysLimit(shift.timeStart);
+        const updedShifts = await this.ShiftsRepository.update({ ...dto, userId: user.id }, { where });
         return updedShifts;
     }
 
